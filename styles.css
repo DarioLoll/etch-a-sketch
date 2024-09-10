@@ -4,3 +4,53 @@
     box-sizing: border-box;
     list-style: none;
 }
+
+a {
+    text-decoration: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 100px;
+    background-color: #1F2937;
+    color: #F9FAF8;
+    font-size: 18px;
+}
+
+nav a {
+    color: #F9FAF8;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+ul {
+    display: flex;
+    gap: 20px;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 50px 100px;
+}
+
+.grid {
+    box-sizing: content-box;
+    display: flex;
+    flex-wrap: wrap;
+    border: #1F2937 5px solid;
+    width: 1024px;
+}
+
+.cell {
+    border: #000 1px solid;
+}

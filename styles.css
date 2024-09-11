@@ -54,3 +54,7 @@ main {
 .cell {
     border: #000 1px solid;
 }
+
+.hoveredCell {
+    background-color: red;
+}

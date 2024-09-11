@@ -1,8 +1,7 @@
-generateGrid(64);
+const grid = document.querySelector(".grid");
+generateGrid(16, grid);
 
-function generateGrid(size) {
-    const container = document.querySelector(".grid");
-
+function generateGrid(size, container) {
     let containerWidth = getComputedStyle(container).width;
     containerWidth = parseInt(containerWidth.slice(0, -2));
     let cellSize = containerWidth  / size;
@@ -12,6 +11,14 @@ function generateGrid(size) {
         cell.classList.toggle("cell");
         cell.style.width = cellSize + "px";
         cell.style.height = cellSize + "px";
+
+        cell.addEventListener("mouseenter", () => {
+            let hoverClass = "hoveredCell";
+            if(!cell.classList.contains(hoverClass)) {
+                cell.classList.add(hoverClass);
+            }
+        })
+
         container.appendChild(cell);
     }
 }

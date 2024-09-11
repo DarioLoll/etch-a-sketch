@@ -1,4 +1,5 @@
 const grid = document.querySelector(".grid");
+addEventListeners();
 generateGrid(16, grid);
 
 function generateGrid(size, container) {
@@ -21,4 +22,36 @@ function generateGrid(size, container) {
 
         container.appendChild(cell);
     }
+}
+
+function onResetClick() {
+    alert("reset");
+}
+
+function onChangeGridSizeClick() {
+    alert("change grid size");
+}
+
+function onToggleRainbowClick() {
+    alert("toggle rainbow");
+}
+
+function onToggleShadingClick() {
+    alert("toggle shading");
+}
+
+function addEventListeners() {
+    addListener(".button-reset", onResetClick);
+    addListener(".button-change-grid-size", onChangeGridSizeClick);
+    addListener(".button-toggle-rainbow", onToggleRainbowClick);
+    addListener(".button-toggle-shading", onToggleShadingClick);
+}
+
+function addListener(selector, func, eventName = "click") {
+    let element = document.querySelector(selector);
+    if (element === null) {
+        console.log("No element found with the selector: " + selector);
+        return;
+    }
+    element.addEventListener(eventName, func);
 }

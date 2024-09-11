@@ -39,7 +39,10 @@ ul {
 
 main {
     display: flex;
+    flex-direction: column;
+    gap: 50px;
     justify-content: center;
+    align-items: center;
     padding: 50px 100px;
 }
 
@@ -48,7 +51,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     border: #1F2937 5px solid;
-    width: 1024px;
+    width: 768px;
 }
 
 .cell {
@@ -57,4 +60,26 @@ main {
 
 .hoveredCell {
     background-color: red;
+}
+
+.options {
+    display: flex;
+    gap: 20px;
+}
+
+.options button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 7px;
+    border: none;
+    background-color: #3882F6;
+    color: #F9FAF8;
+}
+
+.options button:hover {
+    background-color: #3572D6;
+}
+
+.options button:active {
+    background-color: #3262B6;
 }

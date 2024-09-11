@@ -1,4 +1,15 @@
+let hoveredCell;
+let isMouseDown = false;
+
 const grid = document.querySelector(".grid");
+grid.addEventListener("mousedown", () => {
+    console.log("grid clicked, hovered cell: " + hoveredCell)
+    if (hoveredCell === null) return;
+    let hoverClass = "hoveredCell";
+    if(!hoveredCell.classList.contains(hoverClass)) {
+        hoveredCell.classList.add(hoverClass);
+    }
+});
 addEventListeners();
 generateGrid(16, grid);
 
@@ -9,18 +20,24 @@ function generateGrid(size, container) {
 
     for (let i = 0; i < size * size; i++) {
         let cell = document.createElement("div");
+        cell.draggable = false;
         cell.classList.toggle("cell");
         cell.style.width = cellSize + "px";
         cell.style.height = cellSize + "px";
 
-        cell.addEventListener("mouseenter", () => {
-            let hoverClass = "hoveredCell";
-            if(!cell.classList.contains(hoverClass)) {
-                cell.classList.add(hoverClass);
-            }
-        })
+        cell.addEventListener("mouseleave", () => hoveredCell = null)
+        cell.addEventListener("mouseenter", () => onCellHovered(cell))
 
         container.appendChild(cell);
+    }
+}
+
+function onCellHovered(cell) {
+    hoveredCell = cell;
+    if(!isMouseDown) return;
+    let hoverClass = "hoveredCell";
+    if(!cell.classList.contains(hoverClass)) {
+        cell.classList.add(hoverClass);
     }
 }
 
@@ -41,6 +58,8 @@ function onToggleShadingClick() {
 }
 
 function addEventListeners() {
+    document.addEventListener("mousedown", () => isMouseDown = true);
+    document.addEventListener("mouseup", () => isMouseDown = false);
     addListener(".button-reset", onResetClick);
     addListener(".button-change-grid-size", onChangeGridSizeClick);
     addListener(".button-toggle-rainbow", onToggleRainbowClick);

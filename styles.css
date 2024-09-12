@@ -59,7 +59,7 @@ main {
 }
 
 .hoveredCell {
-    background-color: red;
+    background-color: rgb(255, 0, 0);
 }
 
 .options {

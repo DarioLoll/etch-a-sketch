@@ -1,19 +1,20 @@
 let hoveredCell;
+let hoverClass = "hoveredCell";
 let isMouseDown = false;
+
+let isRainbowToggled = false;
+let isShadingToggled = false;
 
 const grid = document.querySelector(".grid");
 grid.addEventListener("mousedown", () => {
-    console.log("grid clicked, hovered cell: " + hoveredCell)
     if (hoveredCell === null) return;
-    let hoverClass = "hoveredCell";
-    if(!hoveredCell.classList.contains(hoverClass)) {
-        hoveredCell.classList.add(hoverClass);
-    }
+    colorCell(hoveredCell);
 });
 addEventListeners();
 generateGrid(16, grid);
 
 function generateGrid(size, container) {
+    container.replaceChildren();
     let containerWidth = getComputedStyle(container).width;
     containerWidth = parseInt(containerWidth.slice(0, -2));
     let cellSize = containerWidth  / size;
@@ -35,26 +36,74 @@ function generateGrid(size, container) {
 function onCellHovered(cell) {
     hoveredCell = cell;
     if(!isMouseDown) return;
-    let hoverClass = "hoveredCell";
+    colorCell(cell);
+}
+
+function colorCell(cell) {
     if(!cell.classList.contains(hoverClass)) {
         cell.classList.add(hoverClass);
     }
+    if (isRainbowToggled) {
+        cell.style.backgroundColor = getRandomColor();
+    } else if (isShadingToggled) {
+        applyShading(cell);
+    }
+}
+
+function applyShading(cell) {
+    let currentBackground = getComputedStyle(cell).backgroundColor;
+    console.log("current background " + currentBackground);
+    let currentOpacity = getOpacity(currentBackground);
+    console.log("current opacity " + currentOpacity);
+
+    //opacity shouldn't exceed 1 and should reset to 0.1 instead
+    let newOpacity = currentOpacity + 0.1 > 1 ? 0.1 : currentOpacity + 0.1;
+    let newColor = setOpacity(currentBackground, newOpacity);
+    cell.style.backgroundColor = newColor;
+    console.log("setting new color " + cell.style.backgroundColor);
+}
+
+function getOpacity(rgbaString) {
+    if (!rgbaString.includes("rgba")) {
+        return 1;
+    }
+    let colorValues = rgbaString.replace(")", "").split(", ");
+    return parseFloat(colorValues[3]);
+}
+
+function setOpacity(rgbString, opacity) {
+    if (!rgbString.includes("rgba")) {
+        rgbString = rgbString.replace("rgb", "rgba");
+    }
+    let colorValues = rgbString.replace(")", "").replace("rgba(", "").split(", ");
+    let newColor = `rgba(${colorValues[0]}, ${colorValues[1]}, ${colorValues[2]}, ${opacity})`;
+    return newColor;
+}
+
+function getRandomColor() {
+    let randomRed = Math.random() * 255;
+    let randomBlue = Math.random() * 255;
+    let randomGreen = Math.random() * 255;
+    return `rgb(${randomRed}, ${randomBlue}, ${randomGreen})`;
 }
 
 function onResetClick() {
-    alert("reset");
+    let cellsToReset = document.querySelectorAll("." + hoverClass);
+    cellsToReset.forEach(cell => {
+        cell.classList.remove(hoverClass);
+        cell.style["background-color"] = ""
+    });
 }
 
 function onChangeGridSizeClick() {
-    alert("change grid size");
-}
-
-function onToggleRainbowClick() {
-    alert("toggle rainbow");
-}
-
-function onToggleShadingClick() {
-    alert("toggle shading");
+    let newSize = prompt("Enter the new grid size: ", 16);
+    if (newSize === null) return;
+    newSize = parseInt(newSize);
+    if (newSize === NaN || newSize > 100 || newSize < 1) {
+        alert("Please enter a valid number between 1 and 100!");
+        return;
+    }
+    generateGrid(newSize, grid);
 }
 
 function addEventListeners() {
@@ -62,8 +111,14 @@ function addEventListeners() {
     document.addEventListener("mouseup", () => isMouseDown = false);
     addListener(".button-reset", onResetClick);
     addListener(".button-change-grid-size", onChangeGridSizeClick);
-    addListener(".button-toggle-rainbow", onToggleRainbowClick);
-    addListener(".button-toggle-shading", onToggleShadingClick);
+    addListener(".button-toggle-rainbow", () => {
+        isRainbowToggled = !isRainbowToggled;
+        isShadingToggled = false;
+    });
+    addListener(".button-toggle-shading", () => {
+        isShadingToggled = !isShadingToggled;
+        isRainbowToggled = false;
+    });
 }
 
 function addListener(selector, func, eventName = "click") {
